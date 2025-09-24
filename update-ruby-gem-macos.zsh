@@ -34,7 +34,8 @@ fi
 #echo $defaultversionnum
 if [[ ${installedGemVersionNum:0:3} > ${defaultGemVersionNum:0:3} ]];then
     echo "Replacing default Gem with newer one..."
-    /bin/rm "/Library/Ruby/Gems/2.6.0/specifications/default/$4-*.gemspec"
+	/bin/rm "/Library/Ruby/Gems/2.6.0/specifications/default/$4-$defaultGemVersion.gemspec"
+    /bin/rm /Library/Ruby/Gems/2.6.0/specifications/default/$4-*.gemspec
     /bin/cp "/Library/Ruby/Gems/2.6.0/specifications/$4-$installedGemVersion.gemspec" "/Library/Ruby/Gems/2.6.0/specifications/default/"
 else
     echo "Not replacing default Gem..."
