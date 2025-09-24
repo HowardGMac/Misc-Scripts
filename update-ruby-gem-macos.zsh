@@ -3,7 +3,7 @@
 # Update Ruby Gem by Name
 # This script will update the named Ruby Gem to the latest version.
 # It will only work with the default macOS installed Ruby system (2.6.0 when written) and WILL NOT update any homebrew installed versions.
-# If the default version of the gem being updated is older than the latest, it will rename the older default spec file and set the updated version as the default.
+# If the default version of the gem being updated is older than the latest, it will remove the older default spec file and set the updated version as the default.
 # This script was written for use with JAMF and looks for the Ruby Gem name to be provided as paramater 4. Adjust the script as needed for your use case.
 #
 testforgem=$(/usr/bin/gem list ${4} --installed)
@@ -34,7 +34,7 @@ fi
 #echo $defaultversionnum
 if [[ ${installedGemVersionNum:0:3} > ${defaultGemVersionNum:0:3} ]];then
     echo "Replacing default Gem with newer one..."
-    /bin/mv "/Library/Ruby/Gems/2.6.0/specifications/default/$4-$defaultGemVersion.gemspec" "/Library/Ruby/Gems/2.6.0/specifications/default/$4-$defaultGemVersion.cepsmeg"
+    /bin/rm "/Library/Ruby/Gems/2.6.0/specifications/default/$4-*.gemspec"
     /bin/cp "/Library/Ruby/Gems/2.6.0/specifications/$4-$installedGemVersion.gemspec" "/Library/Ruby/Gems/2.6.0/specifications/default/"
 else
     echo "Not replacing default Gem..."
