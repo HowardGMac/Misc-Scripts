@@ -32,29 +32,25 @@ if [[ -z $defaultGemVersionNum ]]; then
 fi
 #echo $installedversionnum
 #echo $defaultversionnum
-if [[ ${installedGemVersionNum:0:3} > ${defaultGemVersionNum:0:3} ]];then
-    echo "Removing older Gem references..."
+echo "Removing older Gem references..."
+specDeletion=$(ls /Library/Ruby/Gems/2.6.0/specifications/$4*)
+specCount=$(wc -l <<< "$specDeletion")
+while (( specCount >1 )); do
+    itemToDelete=$(echo "$specDeletion" | head -n1)
+    echo "Removing $itemToDelete..."
+    rm $itemToDelete
     specDeletion=$(ls /Library/Ruby/Gems/2.6.0/specifications/$4*)
     specCount=$(wc -l <<< "$specDeletion")
-    while (( specCount >1 )); do
-        itemToDelete=$(echo "$specDeletion" | head -n1)
-        echo "Removing $itemToDelete..."
-        rm $itemToDelete
-        specDeletion=$(ls /Library/Ruby/Gems/2.6.0/specifications/$4*)
-        specCount=$(wc -l <<< "$specDeletion")
-    done
-    echo "Removing older Gem default references..."
-    /bin/cp "/Library/Ruby/Gems/2.6.0/specifications/$4-$installedGemVersion.gemspec" "/Library/Ruby/Gems/2.6.0/specifications/default/"
+done
+echo "Removing older Gem default references..."
+/bin/cp "/Library/Ruby/Gems/2.6.0/specifications/$4-$installedGemVersion.gemspec" "/Library/Ruby/Gems/2.6.0/specifications/default/"
+specDeletion=$(ls /Library/Ruby/Gems/2.6.0/specifications/default/$4*)
+specCount=$(wc -l <<< "$specDeletion")
+while (( specCount >1 )); do
+    itemToDelete=$(echo "$specDeletion" | head -n1)
+    echo "Removing $itemToDelete..."
+    rm $itemToDelete
     specDeletion=$(ls /Library/Ruby/Gems/2.6.0/specifications/default/$4*)
     specCount=$(wc -l <<< "$specDeletion")
-    while (( specCount >1 )); do
-        itemToDelete=$(echo "$specDeletion" | head -n1)
-        echo "Removing $itemToDelete..."
-        rm $itemToDelete
-        specDeletion=$(ls /Library/Ruby/Gems/2.6.0/specifications/default/$4*)
-        specCount=$(wc -l <<< "$specDeletion")
-    done
-else
-    echo "Not replacing older Gem references..."
-fi
+done
 echo "$(/usr/bin/gem list ${4})"
